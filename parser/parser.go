@@ -2,9 +2,9 @@
 package parser
 
 import (
-	"github.com/gentmaks/intepreter/ast"
-	"github.com/gentmaks/intepreter/lexer"
-	"github.com/gentmaks/intepreter/token"
+	"github.com/gentmaks/interpreter/ast"
+	"github.com/gentmaks/interpreter/lexer"
+	"github.com/gentmaks/interpreter/token"
 )
 
 type Parser struct {
@@ -43,7 +43,7 @@ func (p *Parser) ParseProgram() *ast.Program {
 
 func (p *Parser) parseStatement() ast.Statement {
 	switch p.currToken.Type {
-	case token.Let:
+	case token.LET:
 		return p.parseLetStatement()
 	default:
 		return nil
