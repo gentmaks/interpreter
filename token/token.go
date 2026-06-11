@@ -9,8 +9,13 @@ type Token struct {
 }
 
 var keywords = map[string]TokenType{
-	"fn":  FUNCTION,
-	"let": LET,
+	"fn":     FUNCTION,
+	"let":    LET,
+	"return": RETURN,
+	"false":  FALSE,
+	"true":   TRUE,
+	"if":     IF,
+	"else":   ELSE,
 }
 
 func LookupIdent(ident string) TokenType {
@@ -39,6 +44,8 @@ const (
 	SLASH    = "/"
 	LT       = "<"
 	GT       = ">"
+	EQ       = "=="
+	NEQ      = "!="
 
 	// Delimiters
 	COMMA     = ","
@@ -52,4 +59,9 @@ const (
 	// Keywords
 	LET      = "LET"
 	FUNCTION = "FUNCTION"
+	RETURN   = "RETURN"
+	FALSE    = "FALSE"
+	TRUE     = "TRUE"
+	IF       = "IF"
+	ELSE     = "ELSE"
 )
