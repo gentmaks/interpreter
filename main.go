@@ -2,15 +2,18 @@ package main
 
 import (
 	"fmt"
+	"os"
+	"os/user"
 
-	"github.com/gentmaks/interpreter/lexer"
+	"github.com/gentmaks/interpreter/repl"
 )
 
 func main() {
-	l := lexer.New("=+(){},;")
-	tok := l.NextToken()
-	for tok.Literal != "" {
-		fmt.Println(tok)
-		tok = l.NextToken()
+	user, err := user.Current()
+	if err != nil {
+		panic(err)
 	}
+	fmt.Printf("Hello %s! This is the Monkey programming language!\n", user.Username)
+	fmt.Printf("Feel free to type commands!\n")
+	repl.Start(os.Stdin, os.Stdout)
 }
