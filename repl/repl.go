@@ -1,4 +1,5 @@
-package repl // repl package
+// Package repl
+package repl
 
 import (
 	"bufio"
