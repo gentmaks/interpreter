@@ -29,6 +29,11 @@ type LetStatement struct {
 	Value Expression
 }
 
+type ReturnStatement struct {
+	Token token.Token // return token
+	Value Expression
+}
+
 type Identifier struct {
 	Token token.Token
 	Value string
@@ -50,5 +55,10 @@ func (i *Identifier) TokenLiteral() string {
 	return i.Token.Literal
 }
 
-func (ls *LetStatement) StatementNode() {}
-func (i *Identifier) ExpressionNode()   {}
+func (rs *ReturnStatement) TokenLiteral() string {
+	return rs.Token.Literal
+}
+
+func (ls *LetStatement) StatementNode()    {}
+func (i *Identifier) ExpressionNode()      {}
+func (rs *ReturnStatement) StatementNode() {}

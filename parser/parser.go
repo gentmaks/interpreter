@@ -52,6 +52,8 @@ func (p *Parser) parseStatement() ast.Statement {
 	switch p.currToken.Type {
 	case token.LET:
 		return p.parseLetStatement()
+	case token.RETURN:
+		return p.parseReturnStatment()
 	default:
 		return nil
 	}
@@ -72,6 +74,17 @@ func (p *Parser) parseLetStatement() *ast.LetStatement {
 		p.nextToken()
 	}
 	return ls
+}
+
+func (p *Parser) parseReturnStatment() *ast.ReturnStatement {
+	rs := &ast.ReturnStatement{Token: p.currToken}
+	p.nextToken()
+	// TODO: expression part of the parsing
+	// For now we just skip until we encounter a semicolon
+	for !p.expectPeek(token.SEMICOLON) {
+		p.nextToken()
+	}
+	return rs
 }
 
 func (p *Parser) currTokenIs(t token.TokenType) bool {
