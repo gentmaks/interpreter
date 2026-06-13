@@ -34,11 +34,17 @@ type ReturnStatement struct {
 	Value Expression
 }
 
+type ExpressionStatement struct {
+	Token      token.Token
+	Expression Expression
+}
+
 type Identifier struct {
 	Token token.Token
 	Value string
 }
 
+// TokenLiteral methods
 func (p *Program) TokenLiteral() string {
 	if len(p.Statements) > 0 {
 		return p.Statements[0].TokenLiteral()
@@ -59,6 +65,11 @@ func (rs *ReturnStatement) TokenLiteral() string {
 	return rs.Token.Literal
 }
 
-func (ls *LetStatement) StatementNode()    {}
-func (i *Identifier) ExpressionNode()      {}
-func (rs *ReturnStatement) StatementNode() {}
+func (es *ExpressionStatement) TokenLiteral() string {
+	return ""
+}
+
+func (ls *LetStatement) StatementNode()        {}
+func (i *Identifier) ExpressionNode()          {}
+func (rs *ReturnStatement) StatementNode()     {}
+func (es *ExpressionStatement) StatementNOde() {}
