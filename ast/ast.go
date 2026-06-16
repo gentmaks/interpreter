@@ -65,6 +65,11 @@ type InfixExpression struct {
 	Right    Expression
 }
 
+type Boolean struct {
+	Token token.Token
+	Value bool
+}
+
 // TokenLiteral methods
 func (p *Program) TokenLiteral() string {
 	if len(p.Statements) > 0 {
@@ -100,6 +105,10 @@ func (pe *PrefixExpression) TokenLiteral() string {
 
 func (ie *InfixExpression) TokenLiteral() string {
 	return ie.Token.Literal
+}
+
+func (b *Boolean) TokenLiteral() string {
+	return b.Token.Literal
 }
 
 // String methods
@@ -170,6 +179,10 @@ func (ie *InfixExpression) String() string {
 	return out.String()
 }
 
+func (b *Boolean) String() string {
+	return b.Token.Literal
+}
+
 func (ls *LetStatement) StatementNode()        {}
 func (i *Identifier) ExpressionNode()          {}
 func (il *IntegerLiteral) ExpressionNode()     {}
@@ -177,3 +190,4 @@ func (rs *ReturnStatement) StatementNode()     {}
 func (es *ExpressionStatement) StatementNode() {}
 func (pe *PrefixExpression) ExpressionNode()   {}
 func (ie *InfixExpression) ExpressionNode()    {}
+func (b *Boolean) ExpressionNode()             {}

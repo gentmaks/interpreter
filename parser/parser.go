@@ -155,7 +155,10 @@ func (p *Parser) parseExpression(precedence int) ast.Expression {
 }
 
 func (p *Parser) parseIdentifier() ast.Expression {
-	return &ast.Identifier{Token: p.currToken, Value: p.currToken.Literal}
+	return &ast.Identifier{
+		Token: p.currToken,
+		Value: p.currToken.Literal,
+	}
 }
 
 func (p *Parser) parseIntegerLiteral() ast.Expression {
@@ -168,6 +171,13 @@ func (p *Parser) parseIntegerLiteral() ast.Expression {
 	}
 	lit.Value = value
 	return lit
+}
+
+func (p *Parser) parseBoolean() ast.Expression {
+	return &ast.Boolean{
+		Token: p.currToken,
+		Value: p.currTokenIs(token.TRUE),
+	}
 }
 
 func (p *Parser) currTokenIs(t token.TokenType) bool {
@@ -248,6 +258,8 @@ func (p *Parser) peekPrecedence() int {
 func (p *Parser) registerAll() {
 	p.registerPrefix(token.IDENT, p.parseIdentifier)
 	p.registerPrefix(token.INT, p.parseIntegerLiteral)
+	p.registerPrefix(token.TRUE, p.parseBoolean)
+	p.registerPrefix(token.FALSE, p.parseBoolean)
 	p.registerPrefix(token.BANG, p.parsePrefixExpression)
 	p.registerPrefix(token.MINUS, p.parsePrefixExpression)
 	p.registerInfix(token.PLUS, p.parseInfixExpression)
