@@ -95,9 +95,9 @@ func TestBooleanLiteralExpression(t *testing.T) {
 
 func TestParsingPrefixExpressions(t *testing.T) {
 	prefixTests := []struct {
-		input        string
-		operator     string
-		integerValue int64
+		input    string
+		operator string
+		value    any
 	}{
 		{"!5;", "!", 5},
 		{"-15;", "-", 15},
@@ -117,25 +117,16 @@ func TestParsingPrefixExpressions(t *testing.T) {
 		if !ok {
 			t.Fatalf("Sole program statement is not an ExpressionStatement, got=%T", program.Statements[0])
 		}
-		exp, ok := stmt.Expression.(*ast.PrefixExpression)
-		if !ok {
-			t.Fatalf("exp not *ast.PrefixExpression, got=%T", stmt.Expression)
-		}
-		if exp.Operator != tt.operator {
-			t.Fatalf("exp.Operator is not %s, got=%s", tt.operator, exp.Operator)
-		}
-		if !testIntegerLiteral(t, exp.Right, tt.integerValue) {
-			return
-		}
+		testPrefixExpression(t, stmt.Expression, tt.operator, tt.value)
 	}
 }
 
 func TestParsingInfixExpressions(t *testing.T) {
 	infixTests := []struct {
 		input      string
-		leftValue  int64
+		leftValue  any
 		operator   string
-		rightValue int64
+		rightValue any
 	}{
 		{"5 + 5;", 5, "+", 5},
 		{"5 - 5;", 5, "-", 5},
@@ -145,6 +136,9 @@ func TestParsingInfixExpressions(t *testing.T) {
 		{"5 < 5;", 5, "<", 5},
 		{"5 == 5;", 5, "==", 5},
 		{"5 != 5;", 5, "!=", 5},
+		{"true == true", true, "==", true},
+		{"true != false", true, "!=", false},
+		{"false == false", false, "==", false},
 	}
 	for _, tt := range infixTests {
 		l := lexer.New(tt.input)
@@ -442,6 +436,27 @@ func testInfixExpression(
 		return false
 	}
 	if !testLiteralExpression(t, opExp.Right, right) {
+		return false
+	}
+	return true
+}
+
+func testPrefixExpression(
+	t *testing.T,
+	exp ast.Expression,
+	operator string,
+	right any,
+) bool {
+	preExp, ok := exp.(*ast.PrefixExpression)
+	if !ok {
+		t.Errorf("exp is not *ast.PrefixExpression, got=%T(%s)", exp, exp)
+		return false
+	}
+	if preExp.Operator != operator {
+		t.Errorf("exp.Operator is not %s, got=%q", operator, preExp.Operator)
+		return false
+	}
+	if !testLiteralExpression(t, preExp.Right, right) {
 		return false
 	}
 	return true
